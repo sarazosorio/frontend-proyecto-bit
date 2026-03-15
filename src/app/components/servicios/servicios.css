@@ -1,0 +1,15 @@
+h2 {
+    color: #ffb6c1;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.card {
+    border: none;
+    color: #fff;
+}
+
+.card.glass {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+}

@@ -1,0 +1,45 @@
+<section id="contacto" class="container text-center">
+    <h2>Contáctanos</h2>
+    <form class="contact-form mx-auto" (ngSubmit)="submitForm()" #solicitudForm="ngForm">
+        <input type="text" class="form-control mb-3" placeholder="Nombre" name="nombreCliente" [(ngModel)]="form.nombreCliente" required>
+        <input type="email" class="form-control mb-3" placeholder="Correo" name="email" [(ngModel)]="form.email" required>
+        <input type="text" class="form-control mb-3" placeholder="Empresa" name="empresa" [(ngModel)]="form.empresa">
+        <input type="text" class="form-control mb-3" placeholder="Servicio" name="servicio" [(ngModel)]="form.servicio" required>
+        <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje"></textarea>
+        <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid">
+      {{ isEditing ? 'Actualizar solicitud' : 'Enviar mensaje' }}
+    </button>
+        <button type="button" class="btn btn-secondary ms-2" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
+    </form>
+</section>
+
+<section class="container solicitudes mt-1">
+    <h2>Solicitudes recibidas</h2>
+
+    <div class="cards-container">
+        <!-- 
+            <p>Total solicitudes: {{ solicitudes.length }}</p>
+         -->
+
+        <div class="solicitud-card glass p-3 mb-3" *ngFor="let s of solicitudes">
+            <h4>{{ s.nombreCliente }}</h4>
+            <p><strong>Email:</strong> {{ s.email }}</p>
+            <p><strong>Empresa:</strong> {{ s.empresa }}</p>
+            <p><strong>Servicio:</strong> {{ s.servicio }}</p>
+            <p><strong>Mensaje:</strong> {{ s.mensaje }}</p>
+            <p class="estado">
+                Estado:
+                <span [ngClass]="{
+          'estado-nuevo': s.estado==='nuevo',
+          'estado-progreso': s.estado==='en progreso',
+          'estado-completado': s.estado==='completado'
+        }">{{ s.estado }}</span>
+            </p>
+            <p class="fecha" *ngIf="s.fecha">{{ s.fecha | date:'short' }}</p>
+            <div class="card-buttons">
+                <button class="btn-edit btn btn-warning me-2" (click)="editSolicitud(s)">Editar</button>
+                <button class="btn-delete btn btn-danger" (click)="deleteSolicitud(s._id!)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,29 @@
+#hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+    color: #fff;
+}
+
+#hero h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #ffb6c1;
+}
+
+#hero p {
+    font-size: 1.3rem;
+}
+
+.btn-pink {
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: #ff85c1;
+}

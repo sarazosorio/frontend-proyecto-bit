@@ -1,0 +1,123 @@
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.solicitud-card {
+    width: 100%;
+    max-width: 250px;
+    /* más pequeña para que quepan 4 */
+    border-radius: 15px;
+    background: rgba(255, 182, 193, 0.15);
+    color: #fff;
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    /* reducido del anterior 15px */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    line-height: 1.2;
+    /* interlineado más compacto */
+}
+
+.solicitud-card:hover {
+    transform: translateY(-5px);
+}
+
+.solicitud-card h4 {
+    margin: 4px 0;
+    /* márgenes más pequeños */
+    font-size: 1.05rem;
+}
+
+.solicitud-card p {
+    margin: 2px 0;
+    /* reduce el espacio entre párrafos */
+    font-size: 0.88rem;
+    /* ligeramente más pequeño */
+}
+
+.estado-nuevo {
+    color: #ff69b4;
+    font-weight: 600;
+}
+
+.estado-progreso {
+    color: #ffb6c1;
+    font-weight: 600;
+}
+
+.estado-completado {
+    color: #ff1493;
+    font-weight: 600;
+}
+
+
+/* Botones */
+
+.btn-pink {
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    /* reducido para card compacta */
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-size: 0.85rem;
+}
+
+.btn-pink:hover {
+    background-color: #ff85c1;
+}
+
+.btn-edit {
+    background-color: #c267d6;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-size: 0.85rem;
+}
+
+.btn-edit:hover {
+    background-color: #9b4fb0;
+}
+
+.btn-delete {
+    background-color: #e75480;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-size: 0.85rem;
+}
+
+.btn-delete:hover {
+    background-color: #c74469;
+}
+
+
+/* Inputs del formulario */
+
+.form-control {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ff69b4;
+    color: #fff;
+    margin-bottom: 8px;
+    /* más compacto */
+    line-height: 1.2;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ff85c1;
+}
+
+.form-control::placeholder {
+    color: #fff;
+    opacity: 0.8;
+}

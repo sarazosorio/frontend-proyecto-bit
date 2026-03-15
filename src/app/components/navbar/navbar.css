@@ -1,0 +1,27 @@
+.glass {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+    background: rgba(255, 182, 193, 0.3);
+    backdrop-filter: blur(8px);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    color: #fff !important;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: #fff !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #ff69b4 !important;
+}
