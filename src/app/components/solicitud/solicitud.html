@@ -6,7 +6,7 @@
         <input type="text" class="form-control mb-3" placeholder="Empresa" name="empresa" [(ngModel)]="form.empresa">
         <input type="text" class="form-control mb-3" placeholder="Servicio" name="servicio" [(ngModel)]="form.servicio" required>
         <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje"></textarea>
-        <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid">
+        <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
       {{ isEditing ? 'Actualizar solicitud' : 'Enviar mensaje' }}
     </button>
         <button type="button" class="btn btn-secondary ms-2" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
@@ -17,10 +17,6 @@
     <h2>Solicitudes recibidas</h2>
 
     <div class="cards-container">
-        <!-- 
-            <p>Total solicitudes: {{ solicitudes.length }}</p>
-         -->
-
         <div class="solicitud-card glass p-3 mb-3" *ngFor="let s of solicitudes">
             <h4>{{ s.nombreCliente }}</h4>
             <p><strong>Email:</strong> {{ s.email }}</p>

@@ -16,6 +16,7 @@ export class Solicitud implements OnInit {
   solicitudes: Solicitud1[] = [];
   isEditing = false;
   selectedId: string | null = null;
+  enviando = false; // ❌ Evita doble click
 
   form: Solicitud1 = {
     nombreCliente: '',
@@ -34,46 +35,58 @@ export class Solicitud implements OnInit {
 
   // Cargar todas las solicitudes y ordenar por fecha descendente
   loadSolicitudes(): void {
-  this.solicitudesService.getSolicitudes().subscribe({
-    next: data => {
-      // asegurarse que sea un array
-      if (data && Array.isArray(data)) {
-        this.solicitudes = data.map(s => ({
-          ...s,
-          fecha: s.fecha || new Date().toISOString() // si no hay fecha, poner fecha actual
-        })).sort((a, b) => {
-          return new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime();
-        });
-      } else {
-        this.solicitudes = [];
-      }
-    },
-    error: err => console.error('Error cargando solicitudes:', err)
-  });
-}
+    this.solicitudesService.getSolicitudes().subscribe({
+      next: data => {
+        if (data && Array.isArray(data)) {
+          this.solicitudes = data.map(s => ({
+            ...s,
+            fecha: s.fecha || new Date().toISOString()
+          })).sort((a, b) => {
+            return new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime();
+          });
+        } else {
+          this.solicitudes = [];
+        }
+      },
+      error: err => console.error('Error cargando solicitudes:', err)
+    });
+  }
 
   // Enviar o actualizar formulario
   submitForm(): void {
+    if (this.enviando) return; // ❌ Bloquear doble click
+    this.enviando = true;
+
     this.form.estado = this.form.estado as Estado;
 
     if (this.isEditing && this.selectedId) {
       // Actualizar solicitud
       this.solicitudesService.updateSolicitud(this.selectedId, this.form).subscribe({
-        next: () => {
+        next: updated => {
           this.resetForm();
-          this.loadSolicitudes();
+          // Reemplazar en la lista local para no recargar todo
+          const index = this.solicitudes.findIndex(s => s._id === this.selectedId);
+          if (index !== -1) this.solicitudes[index] = updated;
+          this.enviando = false;
         },
-        error: err => console.error('Error actualizando solicitud:', err)
+        error: err => {
+          console.error('Error actualizando solicitud:', err);
+          this.enviando = false;
+        }
       });
     } else {
       // Crear nueva solicitud
-      this.form.estado = 'nuevo'; // siempre nueva al crear
+      this.form.estado = 'nuevo';
       this.solicitudesService.createSolicitud(this.form).subscribe({
-        next: () => {
+        next: nueva => {
+          this.solicitudes.unshift(nueva); // Agrega al inicio
           this.resetForm();
-          this.loadSolicitudes(); // refrescar lista
+          this.enviando = false;
         },
-        error: err => console.error('Error creando solicitud:', err)
+        error: err => {
+          console.error('Error creando solicitud:', err);
+          this.enviando = false;
+        }
       });
     }
   }
@@ -83,7 +96,6 @@ export class Solicitud implements OnInit {
     this.isEditing = true;
     this.selectedId = solicitud._id || null;
 
-    // Copiar propiedades y evitar undefined
     this.form = {
       nombreCliente: solicitud.nombreCliente || '',
       email: solicitud.email || '',
