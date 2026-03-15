@@ -16,7 +16,7 @@ export class Solicitud implements OnInit {
   solicitudes: Solicitud1[] = [];
   isEditing = false;
   selectedId: string | null = null;
-  enviando = false; // evita doble click en enviar
+  enviando = false; // bloquea botón mientras se envía
 
   form: Solicitud1 = {
     nombreCliente: '',
@@ -33,7 +33,7 @@ export class Solicitud implements OnInit {
     this.loadSolicitudes();
   }
 
-  // Cargar todas las solicitudes y ordenar por fecha descendente
+  // Cargar todas las solicitudes desde el servidor
   loadSolicitudes(): void {
     this.solicitudesService.getSolicitudes().subscribe({
       next: data => {
@@ -48,27 +48,34 @@ export class Solicitud implements OnInit {
           this.solicitudes = [];
         }
       },
-      error: err => console.error('Error cargando solicitudes:', err)
+      error: err => {
+        console.error('Error cargando solicitudes:', err);
+        alert('No se pudieron cargar las solicitudes desde el servidor.');
+      }
     });
   }
 
   // Enviar o actualizar formulario
   submitForm(): void {
-    if (this.enviando) return; // evita doble click
+    if (this.enviando) return;
     this.enviando = true;
-
     this.form.estado = this.form.estado as Estado;
 
     if (this.isEditing && this.selectedId) {
+      console.log('Actualizando solicitud con ID:', this.selectedId);
       this.solicitudesService.updateSolicitud(this.selectedId, this.form).subscribe({
         next: updated => {
-          this.resetForm();
           const index = this.solicitudes.findIndex(s => s._id === this.selectedId);
           if (index !== -1) this.solicitudes[index] = updated;
+          this.resetForm();
           this.enviando = false;
+          alert('Solicitud actualizada correctamente.');
         },
         error: err => {
           console.error('Error actualizando solicitud:', err);
+          alert('No se pudo actualizar. La solicitud podría no existir. Se recargará la lista.');
+          this.loadSolicitudes();
+          this.resetForm();
           this.enviando = false;
         }
       });
@@ -76,12 +83,14 @@ export class Solicitud implements OnInit {
       this.form.estado = 'nuevo';
       this.solicitudesService.createSolicitud(this.form).subscribe({
         next: nueva => {
-          this.solicitudes.unshift(nueva); // agrega al inicio
+          this.solicitudes.unshift(nueva);
           this.resetForm();
           this.enviando = false;
+          alert('Solicitud creada correctamente.');
         },
         error: err => {
           console.error('Error creando solicitud:', err);
+          alert('No se pudo crear la solicitud.');
           this.enviando = false;
         }
       });
@@ -92,7 +101,6 @@ export class Solicitud implements OnInit {
   editSolicitud(solicitud: Solicitud1): void {
     this.isEditing = true;
     this.selectedId = solicitud._id || null;
-
     this.form = {
       nombreCliente: solicitud.nombreCliente || '',
       email: solicitud.email || '',
@@ -102,7 +110,6 @@ export class Solicitud implements OnInit {
       estado: solicitud.estado || 'nuevo',
       fecha: solicitud.fecha
     };
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -112,19 +119,17 @@ export class Solicitud implements OnInit {
       console.error('No se puede eliminar: ID vacío');
       return;
     }
-
     if (!confirm('¿Estás seguro de eliminar esta solicitud?')) return;
 
-    console.log('Eliminando ID:', id); // Para debug
-
+    console.log('Eliminando ID:', id);
     this.solicitudesService.deleteSolicitud(id).subscribe({
       next: () => {
-        // Recargar la lista completa para asegurar sincronización
+        alert('Solicitud eliminada correctamente.');
         this.loadSolicitudes();
       },
       error: err => {
         console.error('Error eliminando solicitud:', err);
-        alert('No se pudo eliminar la solicitud. Es posible que ya no exista en el servidor.');
+        alert('No se pudo eliminar la solicitud. Es posible que ya no exista.');
       }
     });
   }

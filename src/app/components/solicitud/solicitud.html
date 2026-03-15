@@ -6,6 +6,7 @@
         <input type="text" class="form-control mb-3" placeholder="Empresa" name="empresa" [(ngModel)]="form.empresa">
         <input type="text" class="form-control mb-3" placeholder="Servicio" name="servicio" [(ngModel)]="form.servicio" required>
         <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje"></textarea>
+
         <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
             {{ isEditing ? 'Actualizar solicitud' : 'Enviar mensaje' }}
         </button>
