@@ -16,7 +16,7 @@ export class Solicitud implements OnInit {
   solicitudes: Solicitud1[] = [];
   isEditing = false;
   selectedId: string | null = null;
-  enviando = false; // ❌ Evita doble click
+  enviando = false; // evita doble click en enviar
 
   form: Solicitud1 = {
     nombreCliente: '',
@@ -54,17 +54,15 @@ export class Solicitud implements OnInit {
 
   // Enviar o actualizar formulario
   submitForm(): void {
-    if (this.enviando) return; // ❌ Bloquear doble click
+    if (this.enviando) return; // evita doble click
     this.enviando = true;
 
     this.form.estado = this.form.estado as Estado;
 
     if (this.isEditing && this.selectedId) {
-      // Actualizar solicitud
       this.solicitudesService.updateSolicitud(this.selectedId, this.form).subscribe({
         next: updated => {
           this.resetForm();
-          // Reemplazar en la lista local para no recargar todo
           const index = this.solicitudes.findIndex(s => s._id === this.selectedId);
           if (index !== -1) this.solicitudes[index] = updated;
           this.enviando = false;
@@ -75,11 +73,10 @@ export class Solicitud implements OnInit {
         }
       });
     } else {
-      // Crear nueva solicitud
       this.form.estado = 'nuevo';
       this.solicitudesService.createSolicitud(this.form).subscribe({
         next: nueva => {
-          this.solicitudes.unshift(nueva); // Agrega al inicio
+          this.solicitudes.unshift(nueva); // agrega al inicio
           this.resetForm();
           this.enviando = false;
         },
@@ -111,14 +108,24 @@ export class Solicitud implements OnInit {
 
   // Eliminar solicitud
   deleteSolicitud(id: string | undefined): void {
-    if (!id) return;
+    if (!id) {
+      console.error('No se puede eliminar: ID vacío');
+      return;
+    }
+
     if (!confirm('¿Estás seguro de eliminar esta solicitud?')) return;
+
+    console.log('Eliminando ID:', id); // Para debug
 
     this.solicitudesService.deleteSolicitud(id).subscribe({
       next: () => {
-        this.solicitudes = this.solicitudes.filter(s => s._id !== id);
+        // Recargar la lista completa para asegurar sincronización
+        this.loadSolicitudes();
       },
-      error: err => console.error('Error eliminando solicitud:', err)
+      error: err => {
+        console.error('Error eliminando solicitud:', err);
+        alert('No se pudo eliminar la solicitud. Es posible que ya no exista en el servidor.');
+      }
     });
   }
 
