@@ -8,22 +8,21 @@
         <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje"></textarea>
 
         <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
-            {{ isEditing ? 'Actualizar solicitud' : 'Enviar mensaje' }}
-        </button>
+      {{ isEditing ? 'Actualizar solicitud' : 'Enviar mensaje' }}
+    </button>
         <button type="button" class="btn btn-secondary ms-2" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
     </form>
 </section>
 
 <section class="container solicitudes mt-1">
     <h2>Solicitudes recibidas</h2>
-
     <div class="cards-container">
-        <div class="solicitud-card glass p-3 mb-3" *ngFor="let s of solicitudes">
-            <h4>{{ s.nombreCliente }}</h4>
-            <p><strong>Email:</strong> {{ s.email }}</p>
-            <p><strong>Empresa:</strong> {{ s.empresa }}</p>
-            <p><strong>Servicio:</strong> {{ s.servicio }}</p>
-            <p><strong>Mensaje:</strong> {{ s.mensaje }}</p>
+        <div class="solicitud-card glass p-3 mb-3" *ngFor="let s of solicitudes; trackBy: trackById">
+            <h4>{{ s.nombreCliente || 'Sin nombre' }}</h4>
+            <p><strong>Email:</strong> {{ s.email || '-' }}</p>
+            <p><strong>Empresa:</strong> {{ s.empresa || '-' }}</p>
+            <p><strong>Servicio:</strong> {{ s.servicio || '-' }}</p>
+            <p><strong>Mensaje:</strong> {{ s.mensaje || '-' }}</p>
             <p class="estado">
                 Estado:
                 <span [ngClass]="{
@@ -35,7 +34,7 @@
             <p class="fecha" *ngIf="s.fecha">{{ s.fecha | date:'short' }}</p>
             <div class="card-buttons">
                 <button class="btn-edit btn btn-warning me-2" (click)="editSolicitud(s)">Editar</button>
-                <button class="btn-delete btn btn-danger" (click)="deleteSolicitud(s._id!)">Eliminar</button>
+                <button class="btn-delete btn btn-danger" (click)="deleteSolicitud(s._id)">Eliminar</button>
             </div>
         </div>
     </div>

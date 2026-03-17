@@ -1,136 +1,89 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { SolicitudesService, Solicitud1, Estado } from './solicitudes.service';
+import { SolicitudesService, Solicitud1 } from './solicitudes.service';
 
 @Component({
   selector: 'app-solicitud',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, DatePipe],
   templateUrl: './solicitud.html',
   styleUrls: ['./solicitud.css']
 })
 export class Solicitud implements OnInit {
 
   solicitudes: Solicitud1[] = [];
+  form: Solicitud1 = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
   isEditing = false;
   selectedId: string | null = null;
-  enviando = false; // bloquea botón mientras se envía
+  enviando = false;
 
-  form: Solicitud1 = {
-    nombreCliente: '',
-    email: '',
-    empresa: '',
-    servicio: '',
-    mensaje: '',
-    estado: 'nuevo'
-  };
-
-  constructor(private solicitudesService: SolicitudesService) {}
+  constructor(private solicitudesService: SolicitudesService,
+              private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadSolicitudes();
   }
 
-  // Cargar todas las solicitudes desde el servidor
   loadSolicitudes(): void {
     this.solicitudesService.getSolicitudes().subscribe({
       next: data => {
-        if (data && Array.isArray(data)) {
-          this.solicitudes = data.map(s => ({
-            ...s,
-            fecha: s.fecha || new Date().toISOString()
-          })).sort((a, b) => {
-            return new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime();
-          });
-        } else {
-          this.solicitudes = [];
-        }
+        this.solicitudes = data.map(s => ({ ...s, fecha: s.fecha || new Date().toISOString() }))
+                                .sort((a,b) => new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime());
+        this.cdr.detectChanges();
       },
       error: err => {
         console.error('Error cargando solicitudes:', err);
-        alert('No se pudieron cargar las solicitudes desde el servidor.');
       }
     });
   }
 
-  // Enviar o actualizar formulario
   submitForm(): void {
     if (this.enviando) return;
     this.enviando = true;
-    this.form.estado = this.form.estado as Estado;
+    const payload = { ...this.form };
 
     if (this.isEditing && this.selectedId) {
-      console.log('Actualizando solicitud con ID:', this.selectedId);
-      this.solicitudesService.updateSolicitud(this.selectedId, this.form).subscribe({
-        next: updated => {
-          const index = this.solicitudes.findIndex(s => s._id === this.selectedId);
-          if (index !== -1) this.solicitudes[index] = updated;
-          this.resetForm();
-          this.enviando = false;
+      this.solicitudesService.updateSolicitud(this.selectedId, payload).subscribe({
+        next: () => {
           alert('Solicitud actualizada correctamente.');
+          window.location.reload(); // forzar recarga para reflejar cambios
         },
         error: err => {
-          console.error('Error actualizando solicitud:', err);
-          alert('No se pudo actualizar. La solicitud podría no existir. Se recargará la lista.');
-          this.loadSolicitudes();
-          this.resetForm();
+          console.error('Error actualizando:', err);
           this.enviando = false;
         }
       });
     } else {
-      this.form.estado = 'nuevo';
-      this.solicitudesService.createSolicitud(this.form).subscribe({
-        next: nueva => {
-          this.solicitudes.unshift(nueva);
-          this.resetForm();
-          this.enviando = false;
+      this.solicitudesService.createSolicitud(payload).subscribe({
+        next: () => {
           alert('Solicitud creada correctamente.');
+          window.location.reload(); // forzar recarga para reflejar cambios
         },
         error: err => {
-          console.error('Error creando solicitud:', err);
-          alert('No se pudo crear la solicitud.');
+          console.error('Error creando:', err);
           this.enviando = false;
         }
       });
     }
   }
 
-  // Editar solicitud
-  editSolicitud(solicitud: Solicitud1): void {
+  editSolicitud(s: Solicitud1): void {
     this.isEditing = true;
-    this.selectedId = solicitud._id || null;
-    this.form = {
-      nombreCliente: solicitud.nombreCliente || '',
-      email: solicitud.email || '',
-      empresa: solicitud.empresa || '',
-      servicio: solicitud.servicio || '',
-      mensaje: solicitud.mensaje || '',
-      estado: solicitud.estado || 'nuevo',
-      fecha: solicitud.fecha
-    };
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.selectedId = s._id || null;
+    this.form = { ...s };
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 
-  // Eliminar solicitud
-  deleteSolicitud(id: string | undefined): void {
-    if (!id) {
-      console.error('No se puede eliminar: ID vacío');
-      return;
-    }
-    if (!confirm('¿Estás seguro de eliminar esta solicitud?')) return;
-
-    console.log('Eliminando ID:', id);
+  deleteSolicitud(id?: string): void {
+    if (!id || !confirm('¿Estás seguro de eliminar esta solicitud?')) return;
     this.solicitudesService.deleteSolicitud(id).subscribe({
       next: () => {
         alert('Solicitud eliminada correctamente.');
-        this.loadSolicitudes();
+        window.location.reload();
       },
-      error: err => {
-        console.error('Error eliminando solicitud:', err);
-        alert('No se pudo eliminar la solicitud. Es posible que ya no exista.');
-      }
+      error: err => console.error('Error eliminando:', err)
     });
   }
 
@@ -138,17 +91,13 @@ export class Solicitud implements OnInit {
     this.resetForm();
   }
 
-  // Resetear formulario
   resetForm(): void {
-    this.form = {
-      nombreCliente: '',
-      email: '',
-      empresa: '',
-      servicio: '',
-      mensaje: '',
-      estado: 'nuevo'
-    };
+    this.form = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
     this.isEditing = false;
     this.selectedId = null;
+  }
+
+  trackById(index: number, item: Solicitud1): string | undefined {
+    return item._id;
   }
 }

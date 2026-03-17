@@ -19,10 +19,7 @@ export interface Solicitud1 {
   providedIn: 'root'
 })
 export class SolicitudesService {
-  // private apiUrl = 'crud-proyecto-bit-production.up.railway.app/api/solicitud';
-
-private apiUrl = 'https://crud-proyecto-bit-production.up.railway.app/api/solicitud';
-  // private apiUrl = 'http://localhost:3000/api/solicitud';
+  private apiUrl = 'https://crud-proyecto-bit-production.up.railway.app/api/solicitud';
 
   constructor(private http: HttpClient) {}
 
@@ -38,7 +35,7 @@ private apiUrl = 'https://crud-proyecto-bit-production.up.railway.app/api/solici
     return this.http.put<Solicitud1>(`${this.apiUrl}/${id}`, solicitud);
   }
 
-  deleteSolicitud(id: string): Observable<{ msg: string }> {
-    return this.http.delete<{ msg: string }>(`${this.apiUrl}/${id}`);
+  deleteSolicitud(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
 }
