@@ -39,4 +39,3 @@ export class SolicitudesService {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
 }
-

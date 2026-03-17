@@ -25,9 +25,12 @@ export class Solicitud implements OnInit {
     this.loadSolicitudes();
   }
 
+  // Cargar todas las solicitudes desde backend
   loadSolicitudes(): void {
     this.solicitudesService.getSolicitudes().subscribe(data => {
-      this.solicitudes = (data || []).map(s => ({ ...s, fecha: s.fecha || new Date().toISOString() }));
+      this.solicitudes = (data || [])
+        .map(s => ({ ...s, fecha: s.fecha || new Date().toISOString() }))
+        .sort((a, b) => new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime());
     });
   }
 
@@ -39,18 +42,24 @@ export class Solicitud implements OnInit {
     if (this.isEditing && this.selectedId) {
       // Actualizar
       this.solicitudesService.updateSolicitud(this.selectedId, payload).subscribe({
-        next: () => {
+        next: updated => {
           alert('Solicitud actualizada correctamente.');
-          window.location.reload(); // 🔹 recarga completa
+          // Actualizamos solo la card editada en el array
+          this.solicitudes = this.solicitudes.map(s => s._id === updated._id ? updated : s);
+          this.resetForm();
+          this.enviando = false;
         },
         error: () => this.enviando = false
       });
     } else {
       // Crear
       this.solicitudesService.createSolicitud(payload).subscribe({
-        next: () => {
+        next: nueva => {
           alert('Solicitud creada correctamente.');
-          window.location.reload(); // 🔹 recarga completa
+          // Agregamos nueva card al inicio de la lista
+          this.solicitudes = [nueva, ...this.solicitudes];
+          this.resetForm();
+          this.enviando = false;
         },
         error: () => this.enviando = false
       });
@@ -70,7 +79,8 @@ export class Solicitud implements OnInit {
     this.solicitudesService.deleteSolicitud(id).subscribe({
       next: () => {
         alert('Solicitud eliminada correctamente.');
-        window.location.reload(); // 🔹 recarga completa
+        // Eliminamos card del array
+        this.solicitudes = this.solicitudes.filter(s => s._id !== id);
       }
     });
   }
