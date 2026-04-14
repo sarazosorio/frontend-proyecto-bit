@@ -1,5 +1,32 @@
 <section id="contacto" class="container text-center">
     <h2>Contáctanos</h2>
+
+    <form class="contact-form mx-auto" (ngSubmit)="submitForm()" #solicitudForm="ngForm">
+
+        <input type="text" class="form-control mb-3" placeholder="Nombre" name="nombreCliente" [(ngModel)]="form.nombreCliente" required>
+
+        <input type="email" class="form-control mb-3" placeholder="Correo" name="email" [(ngModel)]="form.email" required>
+
+        <input type="text" class="form-control mb-3" placeholder="Empresa" name="empresa" [(ngModel)]="form.empresa">
+
+        <input type="text" class="form-control mb-3" placeholder="Servicio" name="servicio" [(ngModel)]="form.servicio" required>
+
+        <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje" required>
+</textarea>
+
+        <!-- <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
+      Enviar mensaje
+    </button> -->
+        <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
+             Enviar mensaje
+        </button>
+    </form>
+    <!-- <p>VALID: {{ solicitudForm.valid }}</p>
+    <p>FORM VALID: {{ solicitudForm.form.valid }}</p> -->
+</section>
+
+<!-- <section id="contacto" class="container text-center">
+    <h2>Contáctanos</h2>
     <form class="contact-form mx-auto" (ngSubmit)="submitForm()" #solicitudForm="ngForm">
         <input type="text" class="form-control mb-3" placeholder="Nombre" name="nombreCliente" [(ngModel)]="form.nombreCliente" required>
         <input type="email" class="form-control mb-3" placeholder="Correo" name="email" [(ngModel)]="form.email" required>
@@ -38,4 +65,4 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->

@@ -2,102 +2,159 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { SolicitudesService, Solicitud1 } from './solicitudes.service';
+import { ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { SolicitudesService, Estado  } from './solicitudes.service';
 
 @Component({
   selector: 'app-solicitud',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, DatePipe],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './solicitud.html',
   styleUrls: ['./solicitud.css']
 })
-export class Solicitud implements OnInit {
 
-  solicitudes: Solicitud1[] = [];
-  form: Solicitud1 = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
-  isEditing = false;
-  selectedId: string | null = null;
+export class Solicitud {
+
+    @ViewChild('solicitudForm') solicitudForm!: NgForm;
+
+  form = {
+    nombreCliente: '',
+    email: '',
+    empresa: '',
+    servicio: '',
+    mensaje: '',
+    estado: 'nuevo' as Estado
+  };
+
   enviando = false;
 
-  constructor(private solicitudesService: SolicitudesService,
-              private cdr: ChangeDetectorRef) {}
-
-  ngOnInit(): void {
-    this.loadSolicitudes();
-  }
-
-  loadSolicitudes(): void {
-    this.solicitudesService.getSolicitudes().subscribe({
-      next: data => {
-        this.solicitudes = data.map(s => ({ ...s, fecha: s.fecha || new Date().toISOString() }))
-                                .sort((a,b) => new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime());
-        this.cdr.detectChanges();
-      },
-      error: err => {
-        console.error('Error cargando solicitudes:', err);
-      }
-    });
-  }
+  constructor(private solicitudesService: SolicitudesService) {}
 
   submitForm(): void {
     if (this.enviando) return;
+
     this.enviando = true;
-    const payload = { ...this.form };
 
-    if (this.isEditing && this.selectedId) {
-      this.solicitudesService.updateSolicitud(this.selectedId, payload).subscribe({
-        next: () => {
-          alert('Solicitud actualizada correctamente.');
-          window.location.reload(); // forzar recarga para reflejar cambios
-        },
-        error: err => {
-          console.error('Error actualizando:', err);
-          this.enviando = false;
-        }
-      });
-    } else {
-      this.solicitudesService.createSolicitud(payload).subscribe({
-        next: () => {
-          alert('Solicitud creada correctamente.');
-          window.location.reload(); // forzar recarga para reflejar cambios
-        },
-        error: err => {
-          console.error('Error creando:', err);
-          this.enviando = false;
-        }
-      });
-    }
-  }
-
-  editSolicitud(s: Solicitud1): void {
-    this.isEditing = true;
-    this.selectedId = s._id || null;
-    this.form = { ...s };
-    window.scrollTo({ top:0, behavior:'smooth' });
-  }
-
-  deleteSolicitud(id?: string): void {
-    if (!id || !confirm('¿Estás seguro de eliminar esta solicitud?')) return;
-    this.solicitudesService.deleteSolicitud(id).subscribe({
+    this.solicitudesService.createSolicitud(this.form).subscribe({
       next: () => {
-        alert('Solicitud eliminada correctamente.');
-        window.location.reload();
+
+        this.enviando = false;
+
+        alert('Correo enviado correctamente 📩');
+
+        // 🔥 RESET REAL Y SEGURO
+        this.form = {
+          nombreCliente: '',
+          email: '',
+          empresa: '',
+          servicio: '',
+          mensaje: '',
+          estado: 'nuevo'
+        };
+
+        // 🔥 fuerza Angular a resetear el form visual
+        setTimeout(() => {
+          if (this.solicitudForm) {
+            this.solicitudForm.resetForm(this.form);
+          }
+        });
+
       },
-      error: err => console.error('Error eliminando:', err)
+      error: (err) => {
+        console.error(err);
+        alert('Error al enviar ❌');
+        this.enviando = false;
+      }
     });
   }
+// export class Solicitud implements OnInit {
 
-  cancelEdit(): void {
-    this.resetForm();
-  }
+//   solicitudes: Solicitud1[] = [];
+//   form: Solicitud1 = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
+//   isEditing = false;
+//   selectedId: string | null = null;
+//   enviando = false;
 
-  resetForm(): void {
-    this.form = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
-    this.isEditing = false;
-    this.selectedId = null;
-  }
+//   constructor(private solicitudesService: SolicitudesService,
+//               private cdr: ChangeDetectorRef) {}
 
-  trackById(index: number, item: Solicitud1): string | undefined {
-    return item._id;
-  }
+//   ngOnInit(): void {
+//     this.loadSolicitudes();
+//   }
+
+//   loadSolicitudes(): void {
+//     this.solicitudesService.getSolicitudes().subscribe({
+//       next: data => {
+//         this.solicitudes = data.map(s => ({ ...s, fecha: s.fecha || new Date().toISOString() }))
+//                                 .sort((a,b) => new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime());
+//         this.cdr.detectChanges();
+//       },
+//       error: err => {
+//         console.error('Error cargando solicitudes:', err);
+//       }
+//     });
+//   }
+
+//   submitForm(): void {
+//     if (this.enviando) return;
+//     this.enviando = true;
+//     const payload = { ...this.form };
+
+//     if (this.isEditing && this.selectedId) {
+//       this.solicitudesService.updateSolicitud(this.selectedId, payload).subscribe({
+//         next: () => {
+//           alert('Solicitud actualizada correctamente.');
+//           window.location.reload(); // forzar recarga para reflejar cambios
+//         },
+//         error: err => {
+//           console.error('Error actualizando:', err);
+//           this.enviando = false;
+//         }
+//       });
+//     } else {
+//       this.solicitudesService.createSolicitud(payload).subscribe({
+//         next: () => {
+//           alert('Solicitud creada correctamente.');
+//           window.location.reload(); // forzar recarga para reflejar cambios
+//         },
+//         error: err => {
+//           console.error('Error creando:', err);
+//           this.enviando = false;
+//         }
+//       });
+//     }
+//   }
+
+//   editSolicitud(s: Solicitud1): void {
+//     this.isEditing = true;
+//     this.selectedId = s._id || null;
+//     this.form = { ...s };
+//     window.scrollTo({ top:0, behavior:'smooth' });
+//   }
+
+//   deleteSolicitud(id?: string): void {
+//     if (!id || !confirm('¿Estás seguro de eliminar esta solicitud?')) return;
+//     this.solicitudesService.deleteSolicitud(id).subscribe({
+//       next: () => {
+//         alert('Solicitud eliminada correctamente.');
+//         window.location.reload();
+//       },
+//       error: err => console.error('Error eliminando:', err)
+//     });
+//   }
+
+//   cancelEdit(): void {
+//     this.resetForm();
+//   }
+
+//   resetForm(): void {
+//     this.form = { nombreCliente:'', email:'', empresa:'', servicio:'', mensaje:'', estado:'nuevo' };
+//     this.isEditing = false;
+//     this.selectedId = null;
+//   }
+
+//   trackById(index: number, item: Solicitud1): string | undefined {
+//     return item._id;
+//   }
 }
