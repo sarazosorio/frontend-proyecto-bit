@@ -1,30 +1,29 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
+  
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { SolicitudesService, Estado  } from './solicitudes.service';
+import { SolicitudesService } from './solicitudes.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-solicitud',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
   templateUrl: './solicitud.html',
   styleUrls: ['./solicitud.css']
 })
-
 export class Solicitud {
 
-    @ViewChild('solicitudForm') solicitudForm!: NgForm;
+  @ViewChild('solicitudForm') solicitudForm!: NgForm;
 
   form = {
     nombreCliente: '',
     email: '',
     empresa: '',
     servicio: '',
-    mensaje: '',
-    estado: 'nuevo' as Estado
+    mensaje: ''
   };
 
   enviando = false;
@@ -32,6 +31,7 @@ export class Solicitud {
   constructor(private solicitudesService: SolicitudesService) {}
 
   submitForm(): void {
+
     if (this.enviando) return;
 
     this.enviando = true;
@@ -39,28 +39,25 @@ export class Solicitud {
     this.solicitudesService.createSolicitud(this.form).subscribe({
       next: () => {
 
-        this.enviando = false;
-
         alert('Correo enviado correctamente 📩');
 
-        // 🔥 RESET REAL Y SEGURO
+        // reset data
         this.form = {
           nombreCliente: '',
           email: '',
           empresa: '',
           servicio: '',
-          mensaje: '',
-          estado: 'nuevo'
+          mensaje: ''
         };
 
-        // 🔥 fuerza Angular a resetear el form visual
+        // reset form Angular
         setTimeout(() => {
-          if (this.solicitudForm) {
-            this.solicitudForm.resetForm(this.form);
-          }
+          this.solicitudForm?.resetForm();
         });
 
+        this.enviando = false;
       },
+
       error: (err) => {
         console.error(err);
         alert('Error al enviar ❌');
@@ -68,6 +65,7 @@ export class Solicitud {
       }
     });
   }
+}
 // export class Solicitud implements OnInit {
 
 //   solicitudes: Solicitud1[] = [];
@@ -157,4 +155,3 @@ export class Solicitud {
 //   trackById(index: number, item: Solicitud1): string | undefined {
 //     return item._id;
 //   }
-}

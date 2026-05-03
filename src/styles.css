@@ -356,5 +356,10 @@ textarea:-webkit-autofill {
     object-fit: contain;
 }
 
+.colorLetterIdioma {
+    color: black;
+    background-color: #ff69b4;
+}
+
 
 /* mantiene proporción sin deformar */

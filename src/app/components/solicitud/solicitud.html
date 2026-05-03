@@ -1,28 +1,38 @@
-<section id="contacto" class="container text-center">
-    <h2>Contáctanos</h2>
+<section id="contacto" class="container text-center ngSkipHydration">
+
+    <h2>{{ 'CONTACT.TITLE' | translate }}</h2>
 
     <form class="contact-form mx-auto" (ngSubmit)="submitForm()" #solicitudForm="ngForm">
 
-        <input type="text" class="form-control mb-3" placeholder="Nombre" name="nombreCliente" [(ngModel)]="form.nombreCliente" required>
+        <!-- Nombre -->
+        <input type="text" class="form-control mb-3" [placeholder]="'CONTACT.NAME' | translate" name="nombreCliente" [(ngModel)]="form.nombreCliente" required>
 
-        <input type="email" class="form-control mb-3" placeholder="Correo" name="email" [(ngModel)]="form.email" required>
+        <!-- Email -->
+        <input type="email" class="form-control mb-3" [placeholder]="'CONTACT.EMAIL' | translate" name="email" [(ngModel)]="form.email" required>
 
-        <input type="text" class="form-control mb-3" placeholder="Empresa" name="empresa" [(ngModel)]="form.empresa">
+        <!-- Empresa -->
+        <input type="text" class="form-control mb-3" [placeholder]="'CONTACT.COMPANY' | translate" name="empresa" [(ngModel)]="form.empresa">
 
-        <input type="text" class="form-control mb-3" placeholder="Servicio" name="servicio" [(ngModel)]="form.servicio" required>
+        <!-- Servicio -->
+        <input type="text" class="form-control mb-3" [placeholder]="'CONTACT.SERVICE' | translate" name="servicio" [(ngModel)]="form.servicio" required>
 
-        <textarea class="form-control mb-3" rows="4" placeholder="Mensaje" name="mensaje" [(ngModel)]="form.mensaje" required>
-</textarea>
+        <!-- Mensaje -->
+        <textarea class="form-control mb-3" rows="4" [placeholder]="'CONTACT.MESSAGE' | translate" name="mensaje" [(ngModel)]="form.mensaje" required></textarea>
 
-        <!-- <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
-      Enviar mensaje
-    </button> -->
+        <!-- DEBUG (solo mientras arreglamos) -->
+        <small class="text-muted d-block mb-2">
+      Form valid: {{ solicitudForm?.valid }}
+    </small>
+
+        <!-- BOTÓN -->
         <button type="submit" class="btn btn-pink" [disabled]="solicitudForm.invalid || enviando">
-             Enviar mensaje
-        </button>
+
+      {{ 'CONTACT.BUTTON' | translate }}
+
+    </button>
+
     </form>
-    <!-- <p>VALID: {{ solicitudForm.valid }}</p>
-    <p>FORM VALID: {{ solicitudForm.form.valid }}</p> -->
+
 </section>
 
 <!-- <section id="contacto" class="container text-center">

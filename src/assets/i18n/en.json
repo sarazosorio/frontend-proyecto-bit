@@ -1,0 +1,67 @@
+{
+    "NAVBAR": {
+        "SERVICIOS": "Services",
+        "EXPERIENCIA": "Experience",
+        "CONTACTO": "Contact Us",
+        "CHATEA": "Chat"
+    },
+    "HERO": {
+        "TITLE": "We Design Your Web Success",
+        "SUBTITLE": "We transform ideas into modern and elegant digital experiences.",
+        "BUTTON": "Learn more"
+    },
+    "SERVICES": {
+        "TITLE": "Our Services",
+        "DESCRIPTION": "We offer modern digital solutions for businesses and entrepreneurs.",
+        "WEB_TITLE": "Professional Web Design",
+        "WEB_TEXT": "We build modern, fast and optimized websites.",
+        "REDESIGN_TITLE": "Website Optimization & Redesign",
+        "REDESIGN_TEXT": "We improve speed, design and conversions.",
+        "AI_TITLE": "AI Automation",
+        "AI_TEXT": "We implement chatbots and smart systems for your business."
+    },
+    "EXPERIENCE": {
+        "TITLE": "Our Projects",
+        "TEXT": "Explore some of the websites we have designed."
+    },
+    "WHY": {
+        "TITLE": "Why Choose Us?",
+        "TEXT": "We combine creativity, technology and artificial intelligence.",
+        "IMPACT_TITLE": "Impactful Design",
+        "IMPACT_TEXT": "Modern and elegant websites that build trust.",
+        "TECH_TITLE": "Smart Technology",
+        "TECH_TEXT": "Modern solutions with AI integration.",
+        "RESULTS_TITLE": "Results Driven",
+        "RESULTS_TEXT": "We don’t just design, we help your business grow."
+    },
+    "PROCESS": {
+        "TITLE": "Our Work Process",
+        "TEXT": "We turn your idea into a professional digital presence.",
+        "STEP1_TITLE": "Understanding your idea",
+        "STEP1_TEXT": "We analyze your goals.",
+        "STEP2_TITLE": "Strategic design",
+        "STEP2_TEXT": "We create the visual structure.",
+        "STEP3_TITLE": "Development",
+        "STEP3_TEXT": "We build your website.",
+        "STEP4_TITLE": "Launch",
+        "STEP4_TEXT": "We publish your website."
+    },
+    "CONTACT": {
+        "TITLE": "Contact Us",
+        "NAME": "Name",
+        "EMAIL": "Email",
+        "COMPANY": "Company",
+        "SERVICE": "Service",
+        "MESSAGE": "Message",
+        "BUTTON": "Send message"
+    },
+    "WHATSAPP": {
+        "TITLE": "Ready to start?",
+        "BUTTON": "Chat with us"
+    },
+    "FOOTER": {
+        "BY": "Designed by",
+        "TEXT": "We transform ideas into digital experiences ✨",
+        "LOCATION": "Wisconsin, USA"
+    }
+}

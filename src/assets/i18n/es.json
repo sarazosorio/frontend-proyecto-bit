@@ -1,0 +1,67 @@
+{
+    "NAVBAR": {
+        "SERVICIOS": "Servicios",
+        "EXPERIENCIA": "Experiencia",
+        "CONTACTO": "Contáctanos",
+        "CHATEA": "Chatea"
+    },
+    "HERO": {
+        "TITLE": "Diseñamos tu Éxito en la Web",
+        "SUBTITLE": "Transformamos ideas en experiencias digitales modernas y elegantes.",
+        "BUTTON": "Descubre más"
+    },
+    "SERVICES": {
+        "TITLE": "Nuestros Servicios",
+        "DESCRIPTION": "Ofrecemos soluciones digitales modernas para ayudar a empresas y emprendedores.",
+        "WEB_TITLE": "Diseño Web Profesional",
+        "WEB_TEXT": "Desarrollamos sitios web modernos, rápidos y optimizados.",
+        "REDESIGN_TITLE": "Optimización y Rediseño Web",
+        "REDESIGN_TEXT": "Mejoramos velocidad, diseño y conversión de tu web.",
+        "AI_TITLE": "Automatización con Inteligencia Artificial",
+        "AI_TEXT": "Implementamos chatbots y sistemas inteligentes para tu negocio."
+    },
+    "EXPERIENCE": {
+        "TITLE": "Proyectos Realizados",
+        "TEXT": "Explora algunas de las páginas web que hemos diseñado."
+    },
+    "WHY": {
+        "TITLE": "¿Por qué elegirnos?",
+        "TEXT": "Combinamos creatividad, tecnología e inteligencia artificial.",
+        "IMPACT_TITLE": "Diseño que Impacta",
+        "IMPACT_TEXT": "Sitios modernos y elegantes que generan confianza.",
+        "TECH_TITLE": "Tecnología Inteligente",
+        "TECH_TEXT": "Soluciones modernas con inteligencia artificial.",
+        "RESULTS_TITLE": "Enfoque en Resultados",
+        "RESULTS_TEXT": "No solo diseñamos, ayudamos a crecer tu negocio."
+    },
+    "PROCESS": {
+        "TITLE": "Nuestro Proceso de Trabajo",
+        "TEXT": "Convertimos tu idea en una presencia digital profesional.",
+        "STEP1_TITLE": "Conocemos tu idea",
+        "STEP1_TEXT": "Analizamos tus objetivos.",
+        "STEP2_TITLE": "Diseño estratégico",
+        "STEP2_TEXT": "Creamos la estructura visual.",
+        "STEP3_TITLE": "Desarrollo",
+        "STEP3_TEXT": "Construimos tu sitio web.",
+        "STEP4_TITLE": "Lanzamiento",
+        "STEP4_TEXT": "Publicamos tu página web."
+    },
+    "CONTACT": {
+        "TITLE": "Contáctanos",
+        "NAME": "Nombre",
+        "EMAIL": "Correo",
+        "COMPANY": "Empresa",
+        "SERVICE": "Servicio",
+        "MESSAGE": "Mensaje",
+        "BUTTON": "Enviar mensaje"
+    },
+    "WHATSAPP": {
+        "TITLE": "¿Listo para comenzar?",
+        "BUTTON": "Chatea con nosotros"
+    },
+    "FOOTER": {
+        "BY": "Diseñado por",
+        "TEXT": "Transformamos ideas en experiencias digitales ✨",
+        "LOCATION": "Wisconsin, USA"
+    }
+}

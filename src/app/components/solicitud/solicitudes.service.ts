@@ -2,15 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export type Estado = 'nuevo' | 'en progreso' | 'completado';
-
 export interface Solicitud1 {
   nombreCliente: string;
   email: string;
   empresa?: string;
   servicio: string;
-  mensaje?: string;
-  estado: Estado;
+  mensaje: string;
 }
 
 @Injectable({
@@ -25,6 +22,7 @@ export class SolicitudesService {
   createSolicitud(data: Solicitud1): Observable<any> {
     return this.http.post(this.apiUrl, data);
   }
+}
 
   // private apiUrl = 'https://crud-proyecto-bit-production.up.railway.app/api/solicitud';
 
@@ -45,4 +43,3 @@ export class SolicitudesService {
   // deleteSolicitud(id: string): Observable<{ message: string }> {
   //   return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   // }
-}
